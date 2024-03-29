@@ -12,8 +12,8 @@ class _Vertex:
         - airport_code: A code that uniquely identifies this airport.
         - country_name: The country where this airport is located.
         - neighbours: A mapping of airports that are connected to self by available flights.
-            The flights info is stored as a mapping of flight packages to their ticket price,
-            number of stops, and CO2 emissions.
+            The flights are stored as a mapping between different flight packages and their
+            ticket price, number of stops, and CO2 emissions.
     """
     airport_code: str
     country_name: str
@@ -50,7 +50,7 @@ class Graph:
         self._vertices[airport_code] = _Vertex(airport_code, country_name)
 
     def add_edge(self, airport1: str, airport2: str,
-                 conn_flights: dict[tuple[str, list[str]], list[int, int, int]]) -> None:
+                 conn_flight: tuple[tuple[str, list[str]], list[int, int, int]]) -> None:
         """
         Add an edge between the two vertices with the given ariport codes in this graph.
 
@@ -63,6 +63,6 @@ class Graph:
             v1 = self._vertices[airport1]
             v2 = self._vertices[airport2]
 
-            # Add the new edge
-            v1.neighbours[v2] = conn_flights
-            v2.neighbours[v1] = conn_flights
+            flight_package, flight_info = conn_flight[0], conn_flight[1]
+            v1.neighbours[v2][flight_package] = flight_info
+            v2.neighbours[v1][flight_package] = flight_info
