@@ -11,11 +11,13 @@ class _Vertex:
     Instance Attributes:
         - airport_code: A code that uniquely identifies this airport.
         - country_name: The country where this airport is located.
-        - neighbours: A mapping of connecting airports to the available flights that connect them.
+        - neighbours: A mapping of airports that are connected to self by available flights.
+            The flights info is stored as a mapping of flight packages to their ticket price,
+            number of stops, and CO2 emissions.
     """
     airport_code: str
     country_name: str
-    neighbours: dict[_Vertex, dict[str, list[str, int, int, int]]]
+    neighbours: dict[_Vertex, dict[tuple[str, list[str]], list[int, int, int]]]
 
     def __init__(self, airport_code: str, country_name: str) -> None:
         """
@@ -46,3 +48,21 @@ class Graph:
         The new vertex is not adjacent to any other vertices.
         """
         self._vertices[airport_code] = _Vertex(airport_code, country_name)
+
+    def add_edge(self, airport1: str, airport2: str,
+                 conn_flights: dict[tuple[str, list[str]], list[int, int, int]]) -> None:
+        """
+        Add an edge between the two vertices with the given ariport codes in this graph.
+
+        Raise a ValueError if ariport1 or airport2 do not appear as vertices in this graph.
+
+        Preconditions:
+            - airport1 != airport2
+        """
+        if airport1 in self._vertices and airport2 in self._vertices:
+            v1 = self._vertices[airport1]
+            v2 = self._vertices[airport2]
+
+            # Add the new edge
+            v1.neighbours[v2] = conn_flights
+            v2.neighbours[v1] = conn_flights
