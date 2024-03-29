@@ -17,15 +17,16 @@ class _Vertex:
     """
     airport_code: str
     country_name: str
-    neighbours: dict[_Vertex, dict[tuple[str, list[str]], list[int, int, int]]]
+    neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int]]]
 
-    def __init__(self, airport_code: str, country_name: str) -> None:
+    def __init__(self, airport_code: str, country_name: str,
+                 neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int]]]) -> None:
         """
         Initialize a vertex with the given airport_code and country_name.
         """
         self.airport_code = airport_code
         self.country_name = country_name
-        self.neighours = {}
+        self.neighbours = neighbours
 
 
 class Graph:
@@ -47,10 +48,11 @@ class Graph:
 
         The new vertex is not adjacent to any other vertices.
         """
-        self._vertices[airport_code] = _Vertex(airport_code, country_name)
+        if airport_code not in self._vertices:
+            self._vertices[airport_code] = _Vertex(airport_code, country_name, {})
 
     def add_edge(self, airport1: str, airport2: str,
-                 conn_flight: tuple[tuple[str, list[str]], list[int, int, int]]) -> None:
+                 conn_flight: tuple[tuple[str, tuple], list[int | float]]) -> None:
         """
         Add an edge between the two vertices with the given ariport codes in this graph.
 
@@ -64,5 +66,10 @@ class Graph:
             v2 = self._vertices[airport2]
 
             flight_package, flight_info = conn_flight[0], conn_flight[1]
-            v1.neighbours[v2][flight_package] = flight_info
-            v2.neighbours[v1][flight_package] = flight_info
+
+            if v2 not in v1.neighbours:
+                v1.neighbours[v2] = {}
+                v2.neighbours[v1] = {}
+
+            v1.neighbours[v2].update({flight_package: flight_info})
+            v2.neighbours[v1].update({flight_package: flight_info})
