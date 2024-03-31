@@ -2,6 +2,7 @@
 This Python file contains the data classes that will be used within our project.
 """
 from __future__ import annotations
+import networkx as nx
 
 
 class _Vertex:
@@ -93,3 +94,21 @@ class Graph:
         """
         v1 = self._vertices[home_airport_code]
         return v1.average_emissions(dest_airport_code)
+
+    def to_networkx(self, max_vertices: int = 100) -> nx.Graph:
+        """Convert this graph into a networkx Graph.
+        max_vertices specifies the maximum number of vertices that can appear in the graph.
+        (This is necessary to limit the visualization output for large graphs.)
+        Note that this method is provided for you, and you shouldn't change it.
+        """
+        graph_nx = nx.Graph()
+        for v in self._vertices.values():
+            graph_nx.add_node(v.airport_code)
+            for u in v.neighbours:
+                if graph_nx.number_of_nodes() < max_vertices:
+                    graph_nx.add_node(u.airport_code)
+                if u.airport_code in graph_nx.nodes:
+                    graph_nx.add_edge(v.airport_code, u.airport_code)
+            if graph_nx.number_of_nodes() >= max_vertices:
+                break
+        return graph_nx
