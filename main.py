@@ -13,7 +13,7 @@ with open('flight_data.csv', 'r') as file:
     reader = csv.reader(file)
     next(reader, None)          # skip the header
     for row in reader:
-        if row[0] == home_airport and row[2] == dest_airport:
+        if row[0] == home_airport:
             graph.add_vertex(row[0], row[1])
             graph.add_vertex(row[2], row[3])
 
