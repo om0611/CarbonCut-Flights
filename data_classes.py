@@ -66,7 +66,7 @@ class Graph:
             self._vertices[airport_code] = _Vertex(airport_code, country_name, {})
 
     def add_edge(self, airport1: str, airport2: str,
-                 conn_flight: tuple[tuple[str, tuple], list[int | float]]) -> None:
+                 conn_flight: tuple[tuple[str, tuple], list[int]]) -> None:
         """
         Add an edge between the two vertices with the given ariport codes in this graph.
 
