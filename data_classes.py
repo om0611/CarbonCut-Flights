@@ -18,10 +18,10 @@ class _Vertex:
     """
     airport_code: str
     country_name: str
-    neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int]]]
+    neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]]
 
     def __init__(self, airport_code: str, country_name: str,
-                 neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int]]]) -> None:
+                 neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]]) -> None:
         """
         Initialize a vertex with the given airport_code and country_name.
         """
@@ -66,7 +66,7 @@ class Graph:
             self._vertices[airport_code] = _Vertex(airport_code, country_name, {})
 
     def add_edge(self, airport1: str, airport2: str,
-                 conn_flight: tuple[tuple[str, tuple], list[int]]) -> None:
+                 conn_flight: tuple[tuple[str, tuple], list[int | float]]) -> None:
         """
         Add an edge between the two vertices with the given ariport codes in this graph.
 
