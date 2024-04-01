@@ -37,6 +37,9 @@ def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
 
 def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: str,
                    weights: tuple[float, float, float] = (0.1, 0.1, 0.8)) -> list[tuple]:
+    """
+    Return the most optimal flight packages between home_airport and dest_airport.
+    """
     home_vertex = graph.get_vertex(home_airport)
     destination_vertex = graph.get_vertex(dest_airport)
 
@@ -51,8 +54,8 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
 
     sorted_flights = sorted(flight_scores.items(), key=lambda item: item[1])
 
-    all_flights = [(flight[0], flights[flight[0]][0], flights[flight[0]][1], round(flight[1], 5)) for flight in
-                   sorted_flights]
+    all_flights = [(flight[0], flights[flight[0]][0], flights[flight[0]][1], round(flight[1], 5))
+                   for flight in sorted_flights]
     if len(all_flights) > 5:
         return all_flights[:4]
     else:
@@ -72,7 +75,13 @@ def all_countries(flight_path_file: str) -> set:
             countries.add(row[3].lower())
 
     return countries
+
+
 def carbon_statistics(offset: int) -> set[str]:
+    """
+    Return a set of statistics based on how much carbon emissions the user saved by choosing
+    a flight package suggested by our program.
+    """
     all_stats = set()
     avg_c02_percentage_person = round((offset / 4000000) * 100, 2)
     car_miles = round(offset / 362, 2)
@@ -102,9 +111,9 @@ def run_voyage() -> None:
     """
     print('Welcome to Verde Voyage! This is your ultimate eco-conscious dream vacation planner!')
     countries = all_countries('flight_data.csv')
-    home_country = input('Which country are you flying from? ')
+    home_airport = input('What is your home airport? ')
 
-    # Display the graph from this airport to all connecting airports.
+    # Display the graph from home_airport to all connecting airports.
 
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations'
                         'that are perfect for you? (Y/N) ')
@@ -114,7 +123,11 @@ def run_voyage() -> None:
 
     dest_country = input('Which country would you like to fly to? ').lower()
     while dest_country not in countries:
-        print('We are sorry! We do not have enough information on this country. We are trying'
+        print('We are sorry! We do not have enough information on this country. We are constantly trying'
               'to expand our reach. Please try a different country.')
 
         dest_country = input('Which country would you like to fly to? ').lower()
+
+    # Display the graph from home_airport to all airports in dest_country.
+
+    dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').upper()
