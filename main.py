@@ -2,7 +2,8 @@
 This Python file contains the main code for our project.
 """
 import csv
-import data_classes
+import graph
+import decision_tree
 
 
 def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
@@ -38,7 +39,7 @@ def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
 # Example Code
 home_airport = 'YYZ'
 dest_airport = 'LHR'
-graph = data_classes.Graph()
+graph = graph.Graph()
 
 with open('flight_data.csv', 'r') as file:
     reader = csv.reader(file)
