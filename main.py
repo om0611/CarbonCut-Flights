@@ -7,7 +7,7 @@ import decision_tree
 
 
 def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
-                            weights: tuple[float, int, int] = (0.1, 0.1, 0.8)) -> dict[tuple[str, tuple], float]:
+                            weights: tuple[float, float, float] = (0.1, 0.1, 0.8)) -> dict[tuple[str, tuple], float]:
     """
     Calculate a score for each flight in flights based on the given weights for price, stops, and
     carbon emissions.
@@ -62,3 +62,22 @@ with open('flight_data.csv', 'r') as file:
             flight_package = (airline, aircrafts)
             flight_info = [price, stops, emissions]
             graph.add_edge(row[0], row[2], (flight_package, flight_info))
+
+
+def optimal_routes(graph, home_airport: str, dest_airport: str, weights: tuple[float, int, int]):
+
+    if home_airport not in graph.all_verticies() or dest_airport not in graph.all_verticies():
+        raise ValueError
+
+    home_vertex = graph.get_vertex(home_airport)
+    destination_vertex = graph.get_vertex(dest_airport)
+
+    if destination_vertex not in home_vertex.neighbours:
+        return []
+
+    flights = home_vertex.neighbours[destination_vertex]
+    flight_scores = calculate_flight_scores(flights, weights)
+
+    sorted_flights = sorted(flight_scores.items(), key=lambda item: item[1])
+
+    return [flight[0] for flight in sorted_flights]

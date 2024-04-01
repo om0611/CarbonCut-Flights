@@ -112,3 +112,15 @@ class Graph:
             if graph_nx.number_of_nodes() >= max_vertices:
                 break
         return graph_nx
+
+def get_vertex(self, airport: str) -> _Vertex:
+    if airport not in self._vertices:
+        raise ValueError
+    else:
+        return self._vertices[airport]
+
+def all_verticies(self) -> set[_Vertex]:
+    all_vert = set()
+    for verticy in self._vertices.values():
+        all_vert.add(verticy)
+    return all_vert
