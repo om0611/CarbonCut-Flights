@@ -6,7 +6,7 @@ import data_classes
 
 
 def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
-                            weights: tuple[float, int, int]) -> dict[tuple[str, tuple], float]:
+                            weights: tuple[float, int, int] = (0.1, 0.1, 0.8)) -> dict[tuple[str, tuple], float]:
     """
     Calculate a score for each flight in flights based on the given weights for price, stops, and
     carbon emissions.
@@ -24,7 +24,7 @@ def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
         flight_info = flights[flight]
         price, stops, emissions = flight_info[0], flight_info[1], flight_info[2]
 
-        # Normalize the values
+        # Normalize the values (puts the values between 0 and 1)
         norm_price = price / max_price
         norm_stops = stops / max_stops
         norm_emissions = emissions / max_emissions
