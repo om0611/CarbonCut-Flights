@@ -1,5 +1,5 @@
 """
-This Python file contains the data classes that will be used within our project.
+This Python file contains the Graph and _Vertex data classes that we will use in our project.
 """
 from __future__ import annotations
 import networkx as nx

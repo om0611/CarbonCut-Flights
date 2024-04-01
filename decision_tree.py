@@ -1,8 +1,8 @@
-
 from __future__ import annotations
 
 import csv
 from typing import Any, Optional
+
 
 class Tree:
     """
@@ -50,7 +50,6 @@ class Tree:
                 if subtree.__contains__(item):
                     return True
             return False
-
 
     def traverse(self, path: list[bool]) -> list[Any]:
         """
@@ -127,6 +126,7 @@ def build_decision_tree(file: str) -> Tree:
 
     return tree
 
+
 def get_user_input(questions: list[str]) -> list[bool]:
     """Return the user's answers to a list of Yes/No questions."""
     answers_so_far = []
@@ -138,6 +138,7 @@ def get_user_input(questions: list[str]) -> list[bool]:
 
     return answers_so_far
 
+
 TRAVEL_QUESTIONS = [
     'Do you prefer a vacation in a climate that is primarily warm and sunny, rather than cold?',
     'Would you like to be near beaches, lakes, rivers?',
@@ -146,10 +147,11 @@ TRAVEL_QUESTIONS = [
     'Do you prefer a destination that offers a vibrant nightlife?',
 ]
 
-def run_country_matchmaker(animal_file: str) -> None:
-    """Run a country matching program based on the given animal data file.
+
+def run_country_matchmaker(file: str) -> None:
+    """Run a country matching program based on the given file.
     """
-    decision_tree = build_decision_tree(animal_file)
+    decision_tree = build_decision_tree(file)
     char = get_user_input(TRAVEL_QUESTIONS)
     matches = decision_tree.traverse(char)
     if not matches:
@@ -158,10 +160,10 @@ def run_country_matchmaker(animal_file: str) -> None:
         print(f"The following country(s) match your inputs {matches}")
 
 
-def all_countries (flight_path_file: str) -> tuple[set[str], set[str]]:
+def all_countries(flight_path_file: str) -> tuple[set[str], set[str]]:
     destination_countries = set()
     original_countries = set()
-    with open (flight_path_file, mode = 'r') as flight_paths:
+    with open(flight_path_file, mode='r') as flight_paths:
         reader = csv.reader(flight_paths)
         next(flight_paths)
         for row in reader:
