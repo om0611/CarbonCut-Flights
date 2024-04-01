@@ -72,3 +72,49 @@ def all_countries(flight_path_file: str) -> set:
             countries.add(row[3])
 
     return countries
+def carbon_statistics(offset: int) -> set[str]:
+    all_stats = set()
+    avg_c02_percentage_person = round((offset / 4000000) * 100, 2)
+    car_miles = round(offset / 362, 2)
+    plastic_bottles = round(offset / 83, 2)
+    light_bulb = round(offset / 42)
+    coffee_cups = round(offset / 50)
+    all_stats.add(
+        f"Over {coffee_cups}! Thats how many coffee cups you saved by flying with VerdeVoyage. Our planet thanks you! ")
+    all_stats.add(
+        f"{light_bulb}. That is how many hours of having a light bulb turned on you have saved by flying with "
+        f"VerdeVoyage.")
+    all_stats.add(
+        f"{plastic_bottles}. That is how many plastic bottles you saved by choosing the most greenflight "
+        f"to your destination! Thank you for flying with VerdeVoyage.")
+    all_stats.add(
+        f"Choosing this flight over the others, you have saved the equivalent of not driving for {car_miles} miles. "
+        f"Thank you for making a greener planet!")
+    all_stats.add(
+        f"By flying with VerdeVoyage, you have saved {avg_c02_percentage_person}% of an individuals "
+        f"annual varbon usage.")
+    return all_stats
+
+
+def run_voyage() -> None:
+    """
+    Runs the entire program.
+    """
+    print('Welcome to Verde Voyage! This is your ultimate eco-conscious dream vacation planner!')
+    countries = all_countries('flight_data.csv')
+    home_country = input('Which country are you flying from? ')
+
+    # Display the graph from this airport to all connecting airports.
+
+    questionare = input('Would you like to answer a few questions to get suggestions for travel destinations'
+                        'that are perfect for you? (Y/N) ')
+    while questionare == 'Y':
+        matches = data_classes.build_decision_tree('country_traits.csv')
+        questionare = input('Would you like to take the questionare again? (Y/N) ')
+
+    dest_country = input('Which country would you like to fly to? ').lower()
+    while dest_country not in countries:
+        print('We are sorry! We do not have enough information on this country. We are trying'
+              'to expand our reach. Please try a different country.')
+
+        dest_country = input('Which country would you like to fly to? ').lower()
