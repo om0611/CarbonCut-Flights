@@ -157,7 +157,7 @@ def run_country_matchmaker(file: str) -> None:
     if not matches:
         print("There are no countries with this match.")
     else:
-        print(f"The following country(s) match your inputs {matches}")
+        print(f"The following country(s) match your inputs: {matches}")
 
 
 def all_countries(flight_path_file: str) -> tuple[set[str], set[str]]:
