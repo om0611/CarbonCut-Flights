@@ -68,8 +68,8 @@ def all_countries(flight_path_file: str) -> set:
         reader = csv.reader(flight_paths)
         next(flight_paths)
         for row in reader:
-            countries.add(row[1])
-            countries.add(row[3])
+            countries.add(row[1].lower())
+            countries.add(row[3].lower())
 
     return countries
 def carbon_statistics(offset: int) -> set[str]:
@@ -92,7 +92,7 @@ def carbon_statistics(offset: int) -> set[str]:
         f"Thank you for making a greener planet!")
     all_stats.add(
         f"By flying with VerdeVoyage, you have saved {avg_c02_percentage_person}% of an individuals "
-        f"annual varbon usage.")
+        f"annual carbon usage.")
     return all_stats
 
 
