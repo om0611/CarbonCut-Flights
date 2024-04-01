@@ -64,13 +64,14 @@ with open('flight_data.csv', 'r') as file:
             graph.add_edge(row[0], row[2], (flight_package, flight_info))
 
 
-def optimal_routes(graph, home_airport: str, dest_airport: str, weights: tuple[float, int, int]):
-
-    if home_airport not in graph.all_verticies() or dest_airport not in graph.all_verticies():
-        raise ValueError
+def optimal_routes(graph, home_airport: str, dest_airport: str, weights: tuple[float, int, int]) -> list[tuple]:
 
     home_vertex = graph.get_vertex(home_airport)
     destination_vertex = graph.get_vertex(dest_airport)
+
+    if home_vertex not in graph.all_verticies() or destination_vertex not in graph.all_verticies():
+        raise ValueError
+
 
     if destination_vertex not in home_vertex.neighbours:
         return []
