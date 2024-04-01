@@ -36,7 +36,7 @@ def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
 
 
 def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: str,
-                   weights: tuple[float, int, int]) -> list[tuple]:
+                   weights: tuple[float, float, float] = (0.1, 0.1, 0.8)) -> list[tuple]:
 
     home_vertex = graph.get_vertex(home_airport)
     destination_vertex = graph.get_vertex(dest_airport)
@@ -52,7 +52,11 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
 
     sorted_flights = sorted(flight_scores.items(), key=lambda item: item[1])
 
-    return [flight[0] for flight in sorted_flights]
+    all_flights = [(flight[0], flights[flight[0]][0], flights[flight[0]][1], round(flight[1], 5) ) for flight in sorted_flights]
+    if len(all_flights) > 5:
+        return all_flights[:4]
+    else:
+        return all_flights
 
 
 def all_countries(flight_path_file: str) -> set:
