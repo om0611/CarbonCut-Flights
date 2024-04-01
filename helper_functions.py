@@ -68,7 +68,31 @@ def all_countries(flight_path_file: str) -> set:
         reader = csv.reader(flight_paths)
         next(flight_paths)
         for row in reader:
-            countries.add(row[1])
-            countries.add(row[3])
+            countries.add(row[1].lower())
+            countries.add(row[3].lower())
 
     return countries
+
+
+def run_voyage() -> None:
+    """
+    Runs the entire program.
+    """
+    print('Welcome to Verde Voyage! This is your ultimate eco-conscious dream vacation planner!')
+    countries = all_countries('flight_data.csv')
+    home_country = input('Which country are you flying from? ')
+
+    # Display the graph from this airport to all connecting airports.
+
+    questionare = input('Would you like to answer a few questions to get suggestions for travel destinations'
+                        'that are perfect for you? (Y/N) ')
+    while questionare == 'Y':
+        matches = data_classes.build_decision_tree('country_traits.csv')
+        questionare = input('Would you like to take the questionare again? (Y/N) ')
+
+    dest_country = input('Which country would you like to fly to? ').lower()
+    while dest_country not in countries:
+        print('We are sorry! We do not have enough information on this country. We are trying'
+              'to expand our reach. Please try a different country.')
+
+        dest_country = input('Which country would you like to fly to? ').lower()
