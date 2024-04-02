@@ -4,6 +4,7 @@ This Python file contains all the helper functions that we will use in our proje
 import data_classes
 import csv
 import visualization
+import test_viz
 
 
 def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
@@ -40,6 +41,8 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
                    weights: tuple[float, float, float] = (0.1, 0.1, 0.8)) -> list[tuple]:
     """
     Return the most optimal flight packages between home_airport and dest_airport.
+
+    The returned tuple has the following format: ((airline, (aircraft)), price, stops, emissions, flight_score).
     """
     home_vertex = graph.get_vertex(home_airport)
     destination_vertex = graph.get_vertex(dest_airport)
@@ -55,12 +58,9 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
 
     sorted_flights = sorted(flight_scores.items(), key=lambda item: item[1])
 
-    all_flights = [(flight[0], flights[flight[0]][0], flights[flight[0]][1], round(flight[1], 5))
-                   for flight in sorted_flights]
-    if len(all_flights) > 5:
-        return all_flights[:4]
-    else:
-        return all_flights
+    all_flights = [(flight[0], flights[flight[0]][0], flights[flight[0]][1], flights[flight[0]][2],
+                    round(flight[1], 5)) for flight in sorted_flights]
+    return all_flights[:4]
 
 
 def countries_and_airports(flight_path_file: str) -> tuple[set[str], set[str], set[str], set[str]]:
@@ -215,3 +215,34 @@ def run_voyage() -> None:
 
     # Display the graph from home_airport to dest_airport with at least 10 flights highlighted.
     graph = create_graph(home_airport=home_airport, dest_airport=dest_airport)
+
+    emissions_weight = float(input('How much do you care about lowering your carbon footprint (5 - 10): '))
+    while emissions_weight < 5 or emissions_weight > 10:
+        print('Invalid input. The value must be between 5 and 10.')
+        emissions_weight = float(input('How much do you care about lowering your carbon footprint (5 - 10): '))
+
+    price_weight = float(input('How much do you care about the ticket price (0 - 5): '))
+    while price_weight < 0 or price_weight > 5:
+        print('Invalid input. The value must be between 0 and 5.')
+        price_weight = float(input('How much do you care about the ticket price (0 - 5): '))
+
+    stops_weight = float(input('How much do you care about the number of stops taken during your flight (0 - 5): '))
+    while stops_weight < 0 or stops_weight > 5:
+        print('Invalid input. The value must be between 0 and 5.')
+        stops_weight = float(input('How much do you care about the number of stops taken during '
+                                   'your flight (0 - 5): '))
+
+    total_weight = emissions_weight + price_weight + stops_weight
+    weights = (emissions_weight / total_weight), (price_weight / total_weight), (stops_weight / total_weight)
+
+    routes = optimal_routes(graph, home_airport, dest_airport, weights)
+    print('Here are the most optimal routes from your home airport to your chosen destination airport: ')
+    for i in range(len(routes)):
+        route = routes[i]
+        print('Flight Package', i+1)
+        print(f"Airline: {route[0][0]}")
+        print(f"Aircrafts: {route[0][1]}")
+        print(f"Price: ${route[1]} USD")
+        print(f"Number of stops: {route[2]}")
+        print(f"Carbon Emissions: {route[3]}g")
+        print()
