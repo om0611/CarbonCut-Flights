@@ -46,6 +46,15 @@ class _Vertex:
                         max_emissions = flight_info[2]
 
                 return max_emissions
+    def neighbors(self) -> set[str]:
+        """
+        Return all the airport codes connected to this airport in a set of strings.
+        """
+        all_neighbors = set()
+        for airport in self.neighbours:
+            all_neighbors.add(airport.airport_code)
+
+        return all_neighbors
 
 
 class Graph:
