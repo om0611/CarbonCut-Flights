@@ -21,20 +21,17 @@ class _Vertex:
     airport_code: str
     country_name: str
     neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]]
-    airport_name: str
     cordinates: tuple[float, float]  # latitude and longitude respectively
 
     def __init__(self, airport_code: str, country_name: str,
-                 neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]], airport_name: str,
-                 coordinates: tuple[float, float]) -> None:
+                 neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]]) -> None:
         """
         Initialize a vertex with the given airport_code and country_name.
         """
         self.airport_code = airport_code
         self.country_name = country_name
         self.neighbours = neighbours
-        self.airport_name = airport_name
-        self.cordinates = coordinates
+        self.cordinates = (0, 0)
 
     def max_emissions(self, dest_airport_code: str) -> int:
         """
