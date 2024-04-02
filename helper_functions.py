@@ -4,7 +4,7 @@ This Python file contains all the helper functions that we will use in our proje
 import data_classes
 import csv
 import visualization
-import test_viz
+import random
 
 
 def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
@@ -14,6 +14,8 @@ def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
     carbon emissions.
 
     Return a mapping between each flight and its score.
+
+    The input weights has the following format: (price, stops, emissions)
     """
     weight_price, weight_stops, weight_emissions = weights
     max_price = max(flights[flight][0] for flight in flights)
@@ -42,6 +44,7 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
     """
     Return the most optimal flight packages between home_airport and dest_airport.
 
+    The input weights has the following format: (price, stops, emissions).
     The returned tuple has the following format: ((airline, (aircraft)), price, stops, emissions, flight_score).
     """
     home_vertex = graph.get_vertex(home_airport)
@@ -55,12 +58,12 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
 
     flights = home_vertex.neighbours[destination_vertex]
     flight_scores = calculate_flight_scores(flights, weights)
-
+    print(flight_scores.items())
     sorted_flights = sorted(flight_scores.items(), key=lambda item: item[1])
 
     all_flights = [(flight[0], flights[flight[0]][0], flights[flight[0]][1], flights[flight[0]][2],
                     round(flight[1], 5)) for flight in sorted_flights]
-    return all_flights[:4]
+    return all_flights[:5]
 
 
 def countries_and_airports(flight_path_file: str) -> tuple[set[str], set[str], set[str], set[str]]:
@@ -90,20 +93,20 @@ def carbon_statistics(offset: int) -> set[str]:
     all_stats = set()
     avg_c02_percentage_person = round((offset / 4000000) * 100, 2)
     car_km = round(offset / 192, 2)
-    plastic_bottles = round(offset / 83, 2)
+    plastic_bottles = round(offset / 83)
     light_bulb = round(offset / 42)
     coffee_cups = round(offset / 50)
     all_stats.add(
-        f"Over {coffee_cups}! Thats how many coffee cups you saved by flying with VerdeVoyage. Our planet thanks you! ")
+        f"Over {coffee_cups} cups! Thats how many coffee cups you saved by flying with VerdeVoyage. "
+        f"Our planet thanks you! ")
     all_stats.add(
-        f"{light_bulb}. That is how many hours of having a light bulb turned on you have saved by flying with "
+        f"{light_bulb} hours. That is how many hours of having a light bulb turned on you have saved by flying with "
         f"VerdeVoyage.")
     all_stats.add(
-        f"{plastic_bottles}. That is how many plastic bottles you saved by choosing the most greenflight "
-        f"to your destination! Thank you for flying with VerdeVoyage.")
+        f"{plastic_bottles} bottles. That is how many plastic bottles you saved by choosing the most greenflight "
+        f"to your destination!")
     all_stats.add(
-        f"Choosing this flight over the others, you have saved the equivalent of not driving for {car_km} kilometers. "
-        f"Thank you for making a greener planet!")
+        f"Choosing this flight over the others, you have saved the equivalent of not driving for {car_km} kilometers.")
     all_stats.add(
         f"By flying with VerdeVoyage, you have saved {avg_c02_percentage_person}% of an individuals "
         f"annual carbon usage.")
@@ -233,10 +236,11 @@ def run_voyage() -> None:
                                    'your flight (0 - 5): '))
 
     total_weight = emissions_weight + price_weight + stops_weight
-    weights = (emissions_weight / total_weight), (price_weight / total_weight), (stops_weight / total_weight)
+    weights = (price_weight / total_weight), (stops_weight / total_weight), (emissions_weight / total_weight)
 
     routes = optimal_routes(graph, home_airport, dest_airport, weights)
-    print('Here are the most optimal routes from your home airport to your chosen destination airport: ')
+    print('Here are the most optimal flight packages from your home airport to your chosen destination airport: ')
+    print()
     for i in range(len(routes)):
         route = routes[i]
         print('Flight Package', i+1)
@@ -246,3 +250,15 @@ def run_voyage() -> None:
         print(f"Number of stops: {route[2]}")
         print(f"Carbon Emissions: {route[3]}g")
         print()
+
+    chosen_route_num = int(input(f'Which flight package would you like to choose? (1 - {len(routes)}) '))
+    while chosen_route_num > len(routes) or chosen_route_num < 1:
+        print('Invalid input.')
+        chosen_route_num = int(input(f'Which flight package would you like to choose? (1 - {len(routes)}) '))
+
+    chosen_route = routes[chosen_route_num - 1]
+    offset = graph.get_vertex(home_airport).max_emissions(dest_airport) - chosen_route[3]
+    co2_stats = carbon_statistics(offset)
+    print(random.choice(list(co2_stats)))
+    print()
+    print('Thank you for flying with VerdeVoyage.')
