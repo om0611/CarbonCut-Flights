@@ -4,11 +4,11 @@ This Python file contains the code to run our program.
 import csv
 import data_classes
 import helper_functions
+import test_viz
 
 
 # Example Code
 home_airport = 'YYZ'
-dest_airport = 'LHR'
 graph = data_classes.Graph()
 
 with open('CSV Files/flight_data.csv', 'r') as file:
