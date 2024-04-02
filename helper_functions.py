@@ -185,7 +185,7 @@ def run_voyage() -> None:
     print("These are all the connecting airports from your home airport.")
     visualization.visualize_graph(graph)
 
-    questionare = input('Would you like to answer a few questions to get suggestions for travel destinations'
+    questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
     while questionare == 'Y':
         matches = data_classes.run_country_matchmaker('country_traits.csv')
