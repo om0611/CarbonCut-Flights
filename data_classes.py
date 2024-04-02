@@ -300,7 +300,7 @@ TRAVEL_QUESTIONS = [
 ]
 
 
-def run_country_matchmaker(file: str) -> list:
+def run_country_matchmaker(file: str) -> None:
     """Run a country matching program based on the given file.
     """
     decision_tree = build_decision_tree(file)
@@ -310,5 +310,3 @@ def run_country_matchmaker(file: str) -> list:
         print("There are no countries with this match.")
     else:
         print(f"The following country(s) match your inputs: {matches}")
-
-    return matches

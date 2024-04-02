@@ -63,21 +63,23 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
         return all_flights
 
 
-def all_countries_and_airports(flight_path_file: str) -> tuple[set[str], set[str]]:
+def countries_and_airports(flight_path_file: str) -> tuple[set[str], set[str], set[str], set[str]]:
     """
-    Returns a tuple of all countries and all airports in the flight dataset.
+    Returns a tuple of home countries, dest countries, home airports, and dest airports in the flight dataset.
     """
-    countries, airports = set(), set()
+    home_countries, home_airports = set(), set()
+    dest_countries, dest_airports = set(), set()
+
     with open(flight_path_file, mode='r') as flight_paths:
         reader = csv.reader(flight_paths)
         next(flight_paths)
         for row in reader:
-            airports.add(row[0])
-            airports.add(row[2])
-            countries.add(row[1].lower())
-            countries.add(row[3].lower())
+            home_airports.add(row[0])
+            dest_airports.add(row[2])
+            home_countries.add(row[1].lower())
+            dest_countries.add(row[3].lower())
 
-    return countries, airports
+    return home_airports, home_countries, dest_airports, dest_countries
 
 
 def carbon_statistics(offset: int) -> set[str]:
@@ -171,10 +173,10 @@ def run_voyage() -> None:
     Runs the entire program.
     """
     print('Welcome to Verde Voyage! This is your ultimate eco-conscious dream vacation planner!')
-    countries, airports = all_countries_and_airports('CSV Files/flight_data.csv')
+    home_airports, home_countries, dest_airports, dest_countries = countries_and_airports('CSV Files/flight_data.csv')
 
     home_airport = input('What is your home airport? (Enter airport code) ').strip().upper()
-    while home_airport not in airports:
+    while home_airport not in home_airports:
         print('We are sorry! We do not have enough information on this airport. We are constantly trying'
               'to expand our reach. Please try a different airport.')
 
@@ -188,11 +190,11 @@ def run_voyage() -> None:
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
     while questionare == 'Y':
-        matches = data_classes.run_country_matchmaker('CSV Files/country_traits.csv')
+        data_classes.run_country_matchmaker('CSV Files/country_traits.csv')
         questionare = input('Would you like to take the questionare again? (Y/N) ').strip().upper()
 
     dest_country = input('Which country would you like to fly to? ').strip().lower()
-    while dest_country not in countries:
+    while dest_country not in dest_countries:
         print('We are sorry! We do not have enough information on this country. We are constantly trying'
               'to expand our reach. Please try a different country.')
 
@@ -205,7 +207,7 @@ def run_voyage() -> None:
     visualization.visualize_graph(graph)
 
     dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').strip().upper()
-    while dest_airport not in airports:
+    while dest_airport not in dest_airports:
         print('We are sorry! We do not have enough information on this airport. We are constantly trying'
               'to expand our reach. Please try a different airport.')
 
