@@ -63,21 +63,23 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
         return all_flights
 
 
-def all_countries_and_airports(flight_path_file: str) -> tuple[set[str], set[str]]:
+def countries_and_airports(flight_path_file: str) -> tuple[set[str], set[str], set[str], set[str]]:
     """
-    Returns a tuple of all countries and all airports in the flight dataset.
+    Returns a tuple of home countries, dest countries, home airports, and dest airports in the flight dataset.
     """
-    countries, airports = set(), set()
+    home_countries, home_airports = set(), set()
+    dest_countries, dest_airports = set(), set()
+
     with open(flight_path_file, mode='r') as flight_paths:
         reader = csv.reader(flight_paths)
         next(flight_paths)
         for row in reader:
-            airports.add(row[0])
-            airports.add(row[2])
-            countries.add(row[1].lower())
-            countries.add(row[3].lower())
+            home_airports.add(row[0])
+            dest_airports.add(row[2])
+            home_countries.add(row[1].lower())
+            dest_countries.add(row[3].lower())
 
-    return countries, airports
+    return home_airports, home_countries, dest_airports, dest_countries
 
 
 def carbon_statistics(offset: int) -> set[str]:
