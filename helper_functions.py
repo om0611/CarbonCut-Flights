@@ -120,7 +120,7 @@ def create_graph(home_airport: str = None, dest_airport: str = None,
         - dest_airport is None or home_airport is not None
     """
     graph = data_classes.Graph()
-    with open('flight_data.csv') as file:
+    with open('CSV Files/flight_data.csv') as file:
         reader = csv.reader(file)
         next(reader, None)              # skip the header
 
@@ -171,7 +171,7 @@ def run_voyage() -> None:
     Runs the entire program.
     """
     print('Welcome to Verde Voyage! This is your ultimate eco-conscious dream vacation planner!')
-    countries, airports = all_countries_and_airports('flight_data.csv')
+    countries, airports = all_countries_and_airports('CSV Files/flight_data.csv')
 
     home_airport = input('What is your home airport? (Enter airport code) ').strip().upper()
     while home_airport not in airports:
@@ -188,7 +188,7 @@ def run_voyage() -> None:
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
     while questionare == 'Y':
-        matches = data_classes.run_country_matchmaker('country_traits.csv')
+        matches = data_classes.run_country_matchmaker('CSV Files/country_traits.csv')
         questionare = input('Would you like to take the questionare again? (Y/N) ').strip().upper()
 
     dest_country = input('Which country would you like to fly to? ').strip().lower()

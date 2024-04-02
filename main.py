@@ -11,7 +11,7 @@ home_airport = 'YYZ'
 dest_airport = 'LHR'
 graph = data_classes.Graph()
 
-with open('flight_data.csv', 'r') as file:
+with open('CSV Files/flight_data.csv', 'r') as file:
     reader = csv.reader(file)
     next(reader, None)          # skip the header
     for row in reader:

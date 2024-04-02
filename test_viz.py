@@ -1,4 +1,4 @@
-"""
+
 import plotly.graph_objects as go
 
 # Manually defined "airports" with latitude and longitude
@@ -53,7 +53,7 @@ fig.update_layout(
 )
 
 fig.show()
-"""
+
 import plotly.graph_objects as go
 import numpy as np
 

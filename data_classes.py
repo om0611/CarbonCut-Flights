@@ -134,6 +134,16 @@ class Graph:
             all_vert.add(vertex)
         return all_vert
 
+    def all_airport_codes(self) -> set[str]:
+        """
+        Return a set of all the airport codes in this graph.
+
+        """
+        airport_codes = set()
+        for vertex in self._vertices.values():
+            airport_codes.add(vertex.airport_code)
+        return airport_codes
+
 
 class Tree:
     """
