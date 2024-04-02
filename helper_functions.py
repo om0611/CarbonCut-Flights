@@ -3,6 +3,7 @@ This Python file contains all the helper functions that we will use in our proje
 """
 import data_classes
 import csv
+import visualization
 
 
 def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
@@ -62,19 +63,21 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
         return all_flights
 
 
-def all_countries(flight_path_file: str) -> set:
+def all_countries_and_airports(flight_path_file: str) -> tuple[set[str], set[str]]:
     """
-    Returns a set of all the countries that are in the flight dataset.
+    Returns a tuple of all countries and all airports in the flight dataset.
     """
-    countries = set()
+    countries, airports = set(), set()
     with open(flight_path_file, mode='r') as flight_paths:
         reader = csv.reader(flight_paths)
         next(flight_paths)
         for row in reader:
+            airports.add(row[0])
+            airports.add(row[2])
             countries.add(row[1].lower())
             countries.add(row[3].lower())
 
-    return countries
+    return countries, airports
 
 
 def carbon_statistics(offset: int) -> set[str]:
@@ -105,29 +108,108 @@ def carbon_statistics(offset: int) -> set[str]:
     return all_stats
 
 
+def create_graph(home_airport: str = None, dest_airport: str = None,
+                 dest_country: str = None) -> data_classes.Graph:
+    """
+    Return a graph containing home_airport and dest_airport as vertices, if given, and the flights between the airports
+    as the edges connecting the two vertices.
+
+    If home_airport and/or dest_airport is not given, return the appropriate graph.
+
+    Preconditions:
+        - dest_airport is None or home_airport is not None
+    """
+    graph = data_classes.Graph()
+    with open('flight_data.csv') as file:
+        reader = csv.reader(file)
+        next(reader, None)              # skip the header
+
+        for row in reader:
+
+            # If any of the values are missing, then move to the next row
+            if row[4] == '' or row[12] == '' or row[14] == '':
+                continue
+
+            if home_airport is None:
+                create_graph_helper(graph, row)
+
+            elif home_airport is not None and dest_airport is not None:
+                if row[0] == home_airport and row[2] == dest_airport:
+                    create_graph_helper(graph, row)
+
+            elif home_airport is not None and dest_country is not None:
+                if row[0] == home_airport and row[3].lower() == dest_country:
+                    create_graph_helper(graph, row)
+
+            else:   # home_airport is not None and both dest_airport and dest_country are None
+                if row[0] == home_airport:
+                    create_graph_helper(graph, row)
+
+    return graph
+
+
+def create_graph_helper(graph: data_classes.Graph, row: list[str]) -> None:
+    """
+    Store the flight information in the given row in the graph.
+    """
+    graph.add_vertex(row[0], row[1])
+    graph.add_vertex(row[2], row[3])
+
+    aircrafts = tuple(row[4].split('|'))
+    airline = row[6].split('| ')[0].strip('[]')
+    stops = int(row[11])
+    price = float(row[12])
+    emissions = int(row[14])
+
+    flight_package = (airline, aircrafts)
+    flight_info = [price, stops, emissions]
+    graph.add_edge(row[0], row[2], (flight_package, flight_info))
+
+
 def run_voyage() -> None:
     """
     Runs the entire program.
     """
     print('Welcome to Verde Voyage! This is your ultimate eco-conscious dream vacation planner!')
-    countries = all_countries('flight_data.csv')
-    home_airport = input('What is your home airport? ')
+    countries, airports = all_countries_and_airports('flight_data.csv')
+
+    home_airport = input('What is your home airport? (Enter airport code) ').strip().upper()
+    while home_airport not in airports:
+        print('We are sorry! We do not have enough information on this airport. We are constantly trying'
+              'to expand our reach. Please try a different airport.')
+
+        home_airport = input('What is your home airport? (Enter airport code) ').strip().upper()
 
     # Display the graph from home_airport to all connecting airports.
+    graph = create_graph(home_airport=home_airport)
+    print("These are all the connecting airports from your home airport.")
+    visualization.visualize_graph(graph)
 
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations'
-                        'that are perfect for you? (Y/N) ')
+                        'that are perfect for you? (Y/N) ').strip().upper()
     while questionare == 'Y':
-        matches = data_classes.build_decision_tree('country_traits.csv')
-        questionare = input('Would you like to take the questionare again? (Y/N) ')
+        matches = data_classes.run_country_matchmaker('country_traits.csv')
+        questionare = input('Would you like to take the questionare again? (Y/N) ').strip().upper()
 
-    dest_country = input('Which country would you like to fly to? ').lower()
+    dest_country = input('Which country would you like to fly to? ').strip().lower()
     while dest_country not in countries:
         print('We are sorry! We do not have enough information on this country. We are constantly trying'
               'to expand our reach. Please try a different country.')
 
-        dest_country = input('Which country would you like to fly to? ').lower()
+        dest_country = input('Which country would you like to fly to? ').strip().lower()
 
     # Display the graph from home_airport to all airports in dest_country.
+    graph = create_graph(home_airport=home_airport, dest_country=dest_country)
+    print("These are all the connecting airports in your chosen destination country from "
+          "your home airport.")
+    visualization.visualize_graph(graph)
 
-    dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').upper()
+    dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').strip().upper()
+    while dest_airport not in airports:
+        print('We are sorry! We do not have enough information on this airport. We are constantly trying'
+              'to expand our reach. Please try a different airport.')
+
+        dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').strip().upper()
+
+    # Display the graph from home_airport to dest_airport with at least 10 flights highlighted.
+    graph = create_graph(home_airport=home_airport, dest_airport=dest_airport)

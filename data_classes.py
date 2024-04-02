@@ -263,7 +263,7 @@ def get_user_input(questions: list[str]) -> list[bool]:
 
     for question in questions:
         print(question)
-        s = input('Y/N: ')
+        s = input('Y/N: ').strip().upper()
         answers_so_far.append(s == 'Y')  # Any other input is interpreted as False
 
     return answers_so_far
