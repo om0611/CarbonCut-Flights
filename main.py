@@ -32,3 +32,7 @@ with open('CSV Files/flight_data.csv', 'r') as file:
             flight_package = (airline, aircrafts)
             flight_info = [price, stops, emissions]
             graph.add_edge(row[0], row[2], (flight_package, flight_info))
+
+with open('CSV Files/78_airport_info.csv', 'r') as file:
+    reader = csv.reader(file)
+    next(reader, None)      #skip the header
