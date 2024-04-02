@@ -31,18 +31,19 @@ class _Vertex:
         self.country_name = country_name
         self.neighbours = neighbours
 
-    def average_emissions(self, dest_airport_code: str) -> float:
+    def max_emissions(self, dest_airport_code: str) -> int:
         """
-        Return the average CO2 emissions for a flight between self and the given destination airport.
+        Return the max CO2 emissions for a flight between self and the given destination airport.
         """
         for neighbour in self.neighbours:
             if neighbour.airport_code == dest_airport_code:
                 flight_packages = self.neighbours[neighbour]
-                sum_emissions = 0
+                max_emissions = 0
                 for flight_info in flight_packages.values():
-                    sum_emissions += flight_info[2]
+                    if flight_info[2] > max_emissions:
+                        max_emissions = flight_info[2]
 
-                return round(sum_emissions / len(flight_packages), 2)
+                return max_emissions
 
 
 class Graph:
@@ -90,12 +91,12 @@ class Graph:
             v1.neighbours[v2].update({flight_package: flight_info})
             v2.neighbours[v1].update({flight_package: flight_info})
 
-    def get_average_emissions(self, home_airport_code: str, dest_airport_code: str) -> float:
+    def get_max_emissions(self, home_airport_code: str, dest_airport_code: str) -> float:
         """
-        Return the average CO2 emissions for a flight between the two given airports.
+        Return the max CO2 emissions for a flight between the two given airports.
         """
         v1 = self._vertices[home_airport_code]
-        return v1.average_emissions(dest_airport_code)
+        return v1.max_emissions(dest_airport_code)
 
     def to_networkx(self, max_vertices: int = 100) -> nx.Graph:
         """Convert this graph into a networkx Graph.
