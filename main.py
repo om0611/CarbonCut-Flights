@@ -16,8 +16,8 @@ with open('CSV Files/flight_data.csv', 'r') as file:
     next(reader, None)          # skip the header
     for row in reader:
         if row[0] == home_airport:
-            graph.add_vertex(row[0], row[1])
-            graph.add_vertex(row[2], row[3])
+            graph.add_vertex(row[0], row[1], (0,0))
+            graph.add_vertex(row[2], row[3], (0,0))
 
             # If any of the values are missing, then move to the next row
             if row[4] == '' or row[12] == '' or row[14] == '':
