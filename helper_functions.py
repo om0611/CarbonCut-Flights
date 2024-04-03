@@ -8,6 +8,28 @@ import random
 import test_viz
 
 
+TRAVEL_TIPS = [
+    "Select Low-Impact Accommodations: Stay in eco-friendly or certified green hotels that prioritize sustainability"
+    " in their operations.",
+    "Use Public Transport or Bike: Explore destinations by public transit, walking, or biking, rather than renting"
+    " a car or using taxis.",
+    "Eat Local and Seasonal: Support local agriculture and reduce carbon emissions by choosing restaurants that serve"
+    " local, seasonal dishes.",
+    "Carry Reusable Items: Pack a reusable water bottle, shopping bags, and utensils to minimize plastic waste.",
+    "Conserve Resources: Be mindful of your energy and water use in hotels. Turn off lights, reuse towels, and avoid"
+    " long showers.",
+    "Respect Natural Environments: Follow guidelines when visiting natural sites to minimize your impact on wildlife"
+    " and habitats.",
+    "Educate Yourself on Local Cultures: Understand and respect the cultural practices and norms of the places "
+    "you visit to foster positive interactions and reduce cultural impact.",
+    "Choose Sustainable Activities: Opt for eco-tourism experiences that promote conservation and benefit "
+    "local communities.",
+    "Reduce, Reuse, Recycle: Always look for opportunities to reduce waste, reuse resources, and recycle when "
+    "possible during your travels.",
+    "Support Eco-friendly Businesses: From tour operators to souvenir shops, prioritize spending your money with "
+    "businesses that have sustainable practices."]
+
+
 def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
                             weights: tuple[float, float, float] = (0.1, 0.1, 0.8)) -> dict[tuple[str, tuple], float]:
     """
@@ -95,7 +117,7 @@ def get_airport_coordinates() -> dict[str, tuple[float, float]]:
         reader = csv.reader(file)
         next(reader, None)  # skip the header
         for row in reader:
-            airport_coords[row[0]] = (float(row[1]), float(row[2]))
+            airport_coords[row[0]] = (float(row[1]), float(row[2]))     # (latitude, longitude)
 
     return airport_coords
 
@@ -204,8 +226,8 @@ def run_voyage() -> None:
 
     # Display the graph from home_airport to all connecting airports.
     graph = create_graph(home_airport=home_airport, airport_coords=airport_coords)
-    print("\nThese are all the connecting airports from your home airport.\n")
-    test_viz.visualize_new_graph(graph, home_airport)
+    print("\nHere are all the connecting airports from your home airport.\n")
+    test_viz.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
 
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
@@ -223,9 +245,9 @@ def run_voyage() -> None:
 
     # Display the graph from home_airport to all airports in dest_country.
     graph = create_graph(home_airport=home_airport, dest_country=dest_country, airport_coords=airport_coords)
-    print("\nThese are all the connecting airports in your chosen destination country from "
+    print("\nHere are all the connecting airports in your chosen destination country from "
           "your home airport.\n")
-    visualization.visualize_graph(graph)
+    test_viz.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
 
     dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').strip().upper()
     while dest_airport not in dest_airports:
@@ -234,8 +256,12 @@ def run_voyage() -> None:
 
         dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').strip().upper()
 
-    # Display the graph from home_airport to dest_airport with at least 10 flights highlighted.
+    # Display the graph from home_airport to dest_airport with at least 5 flights highlighted.
     graph = create_graph(home_airport=home_airport, dest_airport=dest_airport, airport_coords=airport_coords)
+    print("\nHere are a few flight packages for travelling from your home country to your chosen "
+          "destination country.\n")
+    test_viz.visualize_new_graph(graph,
+                                 home_airport=home_airport, dest_airport=dest_airport, airport_coords=airport_coords)
 
     print()
     emissions_weight = float(input('How much do you care about lowering your carbon footprint (5 - 10): '))
@@ -277,9 +303,26 @@ def run_voyage() -> None:
     chosen_route = routes[chosen_route_num - 1]
     offset = graph.get_vertex(home_airport).max_emissions(dest_airport) - chosen_route[3]
 
-    # Summary Block
-
+    print()
+    print("How your decision has made a difference: ")
     co2_stats = carbon_statistics(offset)
     print(random.choice(list(co2_stats)))
     print()
-    print('Thank you for flying with VerdeVoyage.')
+    print("Now, to book your flight, kindly follow these steps: ")
+    print(f'Step 1: Go on to the website of {routes[chosen_route_num - 1][0][0]}.')
+    print(f'Step 2: Search for flights from {home_airport} to {dest_airport}.')
+    print(f'Step 3: Look for flights with the same sequence of aircrafts as provided by the flight package.')
+    print()
+    print("With these simple steps, you have chosen an eco-friendly flight path to your destination!")
+    print()
+    print('To assist with your travels, here are 3 travel tips to help reduce environmental impact:')
+    random_tip1 = random.choice(TRAVEL_TIPS)
+    TRAVEL_TIPS.remove(random_tip1)
+    random_tip2 = random.choice(TRAVEL_TIPS)
+    TRAVEL_TIPS.remove(random_tip2)
+    random_tip3 = random.choice(TRAVEL_TIPS)
+    print(f'Tip 1: {random_tip1}')
+    print(f'Tip 2: {random_tip2}')
+    print(f'Tip 3: {random_tip3}')
+    print()
+    print('Thank you for flying with VerdeVoyage!')

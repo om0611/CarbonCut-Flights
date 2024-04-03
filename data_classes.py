@@ -48,7 +48,7 @@ class _Vertex:
 
                 return max_emissions
 
-    def neighbors(self) -> set[str]:
+    def get_neighbors(self) -> set[str]:
         """
         Return all the airport codes connected to this airport in a set of strings.
         """
