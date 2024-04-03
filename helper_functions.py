@@ -205,7 +205,7 @@ def run_voyage() -> None:
     # Display the graph from home_airport to all connecting airports.
     graph = create_graph(home_airport=home_airport, airport_coords=airport_coords)
     print("\nThese are all the connecting airports from your home airport.\n")
-    test_viz.viusualize_new_graph(graph, home_airport)
+    test_viz.visualize_new_graph(graph, home_airport)
 
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
