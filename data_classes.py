@@ -18,9 +18,9 @@ This file is Copyright (c) 2024 Verde Voyage
 
 """
 from __future__ import annotations
-import networkx as nx
-import csv
 from typing import Any, Optional
+import csv
+import networkx as nx
 
 
 class _Vertex:
@@ -53,6 +53,8 @@ class _Vertex:
     def max_emissions(self, dest_airport_code: str) -> int:
         """
         Return the max CO2 emissions for a flight between self and the given destination airport.
+
+        If dest_airport_code is not a neighbour of self, raise ValueError
         """
         for neighbour in self.neighbours:
             if neighbour.airport_code == dest_airport_code:
@@ -63,6 +65,7 @@ class _Vertex:
                         max_emissions = flight_info[2]
 
                 return max_emissions
+        raise ValueError
 
     def get_neighbors(self) -> set[str]:
         """
@@ -345,9 +348,8 @@ if __name__ == '__main__':
     python_ta.check_all(config={
         'max-line-length': 170,
         'disable': ['E1136', 'W0221'],
-        'extra-imports': ['csv', 'random', 'data_classes', 'flight_visualization'],
-        'allowed-io': ['run_voyage', 'get_airport_coordinates', 'countries_and_airports', 'optimal_routes',
-                       'create_graph'],
+        'extra-imports': ['csv', 'networkx'],
+        'allowed-io': ['get_user_input', 'build_decision_tree', 'run_country_matchmaker'],
         'max-nested-blocks': 4,
         'max-locals': 25,
         'max-statements': 80
