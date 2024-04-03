@@ -208,7 +208,7 @@ def visualize_new_graph(graph: data_classes.Graph, airport_coords: dict[str, tup
             ))
 
     graph_figure.update_layout(
-        title_text='<b>VerdeVoyage </b>',
+        title_text='<b>VerdeVoyage: FLy the Dreak Keep it Green </b>',
         title_font=dict(size=24, color=text_color),
         showlegend=True,
         legend_title_text='Flight Paths',
