@@ -21,17 +21,18 @@ class _Vertex:
     airport_code: str
     country_name: str
     neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]]
-    cordinates: tuple[float, float]  # latitude and longitude respectively
+    coordinates: tuple[float, float]  # latitude and longitude respectively
 
     def __init__(self, airport_code: str, country_name: str,
-                 neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]]) -> None:
+                 neighbours: dict[_Vertex, dict[tuple[str, tuple], list[int | float]]],
+                 coordinates: tuple[float, float]) -> None:
         """
         Initialize a vertex with the given airport_code and country_name.
         """
         self.airport_code = airport_code
         self.country_name = country_name
         self.neighbours = neighbours
-        self.cordinates = (0, 0)
+        self.coordinates = coordinates
 
     def max_emissions(self, dest_airport_code: str) -> int:
         """
@@ -72,13 +73,13 @@ class Graph:
         """Initialize an empty graph (no vertices or edges)."""
         self._vertices = {}
 
-    def add_vertex(self, airport_code: str, country_name: str) -> None:
+    def add_vertex(self, airport_code: str, country_name: str, coords: tuple[float, float]) -> None:
         """Add a vertex with the given airport_code and country_name to this graph.
 
         The new vertex is not adjacent to any other vertices.
         """
         if airport_code not in self._vertices:
-            self._vertices[airport_code] = _Vertex(airport_code, country_name, {})
+            self._vertices[airport_code] = _Vertex(airport_code, country_name, {}, coords)
 
     def add_edge(self, airport1: str, airport2: str,
                  conn_flight: tuple[tuple[str, tuple], list[int | float]]) -> None:
