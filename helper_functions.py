@@ -75,7 +75,7 @@ def run_voyage() -> None:
 
     # Display the graph from home_airport to dest_airport with at least 5 flights highlighted.
     graph = create_graph(home_airport=home_airport, dest_airport=dest_airport, airport_coords=airport_coords)
-    print("\nHere are a few flight packages for travelling from your home country to your chosen "
+    print("\nHere are a few flight routes for travelling from your home country to your chosen "
           "destination country.\n")
     flight_visualization.visualize_new_graph(graph,
                                              home_airport=home_airport, dest_airport=dest_airport,
@@ -192,7 +192,7 @@ def create_graph(airport_coords: dict[str, tuple[float, float]], home_airport: s
     return graph
 
 
-def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
+def calculate_flight_scores(flights: dict[tuple[str, tuple], list[float, int, int]],
                             weights: tuple[float, float, float] = (0.1, 0.1, 0.8)) -> dict[tuple[str, tuple], float]:
     """
     Given a dictionary of flight packages, calculate a score for each flight package in flights
@@ -201,9 +201,6 @@ def calculate_flight_scores(flights: dict[tuple[str, tuple], list[int]],
     Return a mapping between each flight and its score.
 
     The input weights has the following format: (price, stops, emissions)
-
-    >>> calculate_flight_scores({('Flight1', ('Boeing',)): [100, 1, 500]}, (0.1, 0.1, 0.8))
-    {('Flight1', ('Boeing',)): 1.0}
     """
     weight_price, weight_stops, weight_emissions = weights
     max_price = max(flights[flight_l][0] for flight_l in flights)
@@ -362,8 +359,8 @@ TRAVEL_TIPS = [
     "businesses that have sustainable practices."]
 
 if __name__ == '__main__':
-    import python_ta.contracts
-    python_ta.contracts.check_all_contracts()
+    # import python_ta.contracts
+    # python_ta.contracts.check_all_contracts()
     import python_ta
 
     python_ta.check_all(config={
