@@ -4,7 +4,7 @@ This Python file contains the code to run our program.
 import csv
 import data_classes
 import helper_functions
-import test_viz
+import graph_visualization
 
 
 # Example Code
