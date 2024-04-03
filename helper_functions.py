@@ -274,9 +274,11 @@ def run_voyage() -> None:
     while chosen_route_num > len(routes) or chosen_route_num < 1:
         print('Invalid input.')
         chosen_route_num = int(input(f'Which flight package would you like to choose? (1 - {len(routes)}) '))
-
     chosen_route = routes[chosen_route_num - 1]
     offset = graph.get_vertex(home_airport).max_emissions(dest_airport) - chosen_route[3]
+
+    # Summary Block
+
     co2_stats = carbon_statistics(offset)
     print(random.choice(list(co2_stats)))
     print()
