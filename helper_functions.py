@@ -218,7 +218,8 @@ def calculate_flight_scores(flights: dict[tuple[str, tuple], list[float, int, in
         norm_stops = stops / max_stops
         norm_emissions = emissions / max_emissions
 
-        flight_scores[flight] = norm_price * weight_price + norm_stops * weight_stops + norm_emissions * weight_emissions
+        flight_scores[
+            flight] = norm_price * weight_price + norm_stops * weight_stops + norm_emissions * weight_emissions
 
     return flight_scores
 
@@ -367,7 +368,8 @@ if __name__ == '__main__':
         'max-line-length': 170,
         'disable': ['E1136', 'W0221'],
         'extra-imports': ['csv', 'random', 'data_classes', 'flight_visualization'],
-        'allowed-io': ['run_voyage', 'get_airport_coordinates', 'countries_and_airports', 'optimal_routes', 'create_graph'],
+        'allowed-io': ['run_voyage', 'get_airport_coordinates', 'countries_and_airports', 'optimal_routes',
+                       'create_graph'],
         'max-nested-blocks': 4,
         'max-locals': 25,
         'max-statements': 80
