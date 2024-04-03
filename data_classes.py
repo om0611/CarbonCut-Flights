@@ -1,5 +1,21 @@
-"""
-This Python file contains the data classes that we will use in our project.
+"""Verde Voyage: ALL classes used for a green flight path result
+
+Module Description
+==================
+This Python module integrates a graph-based representation of the global airport network with a decision-tree-based
+country matchmaker system. The `Graph` class models airports as vertices and flights as edges, including functionalities
+to manage airport details, flight connections, and calculate maximum CO2 emissions for flights. The `Tree` class
+constructs a decision tree for the country matchmaker system. This system utilizes user responses to travel preference
+questions to recommend countries,
+
+Copyright and Usage Information
+===============================
+This file is provided exclusively for the use and benefit of customers of VerdeVoyage. Any form of
+distribution, reproduction, or modification of this code outside of its intended use within the VerdeVoyage
+platform is strictly prohibited. All rights reserved.
+
+This file is Copyright (c) 2024 Verde Voyage
+
 """
 from __future__ import annotations
 import networkx as nx
@@ -61,12 +77,15 @@ class _Vertex:
 
 class Graph:
     """
-    A graph. In our project, the graph represents a map of various airports around the world.
+    Represents a graph data structure, specifically modeling a network of airports and their connections.
+    Airports are vertices with attributes like code and country, and edges represent flights, including
+    details such as ticket prices, number of stops, and CO2 emissions. Supports operations to add vertices
+    (airports), add edges (flight connections), calculate maximum CO2 emissions between airports, and convert
+    the graph to a NetworkX graph for visualization.
+
+    Private Instance Attributes:
+        - _vertices: A collection of the vertices contained in this graph and maps airport_code to _Vertex object.
     """
-    # Private Instance Attributes:
-    #     - _vertices:
-    #         A collection of the vertices contained in this graph.
-    #         Maps airport_code to _Vertex object.
     _vertices: dict[str, _Vertex]
 
     def __init__(self) -> None:
@@ -113,6 +132,7 @@ class Graph:
 
     def to_networkx(self, max_vertices: int = 100) -> nx.Graph:
         """Convert this graph into a networkx Graph.
+
         max_vertices specifies the maximum number of vertices that can appear in the graph.
         (This is necessary to limit the visualization output for large graphs.)
         Note that this method is provided for you, and you shouldn't change it.
@@ -160,7 +180,12 @@ class Graph:
 
 class Tree:
     """
-    A recursive tree data structure.
+    Represents a recursive tree data structure.
+    Each tree node can contain any type of data and have multiple subtrees, allowing for a recursive structure.
+
+    Instance Attributes:
+        - _root: The data stored in the root node of the tree. If the tree is empty, _root is None.
+        - _subtrees: A list of Tree instances that are the subtrees of the current tree node.
     """
 
     _root: Optional[Any]
@@ -176,7 +201,6 @@ class Tree:
 
     def is_empty(self) -> bool:
         """Return whether this tree is empty.
-
         """
         return self._root is None
 
@@ -193,7 +217,6 @@ class Tree:
 
     def __contains__(self, item: Any) -> bool:
         """Return whether the given is in this tree.
-
         """
         if self.is_empty():
             return False
@@ -230,6 +253,7 @@ class Tree:
     def create_tree(self, items: list) -> Tree:
         """
         Create a tree from the provided list, ensuring that each subsequent item is a child of the previous.
+
         Preconditions:
             - self.is_empty()
         """
@@ -244,7 +268,6 @@ class Tree:
     def insert_sequence(self, items: list) -> None:
         """
         Insert the given items into this tree.
-
         """
         if not items:
             return
@@ -312,3 +335,20 @@ def run_country_matchmaker(file: str) -> None:
         print("There are no countries with this match.")
     else:
         print(f"The following country(s) match your inputs: {matches}")
+
+
+if __name__ == '__main__':
+    # import python_ta.contracts
+    # python_ta.contracts.check_all_contracts()
+    import python_ta
+
+    python_ta.check_all(config={
+        'max-line-length': 170,
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['csv', 'random', 'data_classes', 'flight_visualization'],
+        'allowed-io': ['run_voyage', 'get_airport_coordinates', 'countries_and_airports', 'optimal_routes',
+                       'create_graph'],
+        'max-nested-blocks': 4,
+        'max-locals': 25,
+        'max-statements': 80
+    })

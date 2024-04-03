@@ -1,4 +1,4 @@
-""" Verde Voyage: ALl computation and helper fucntions for a green flight path result
+""" Verde Voyage: ALL computation and helper fucntions for a green flight path result
 
 Module Descriptions
 ==================
@@ -337,27 +337,18 @@ def carbon_statistics(offset: int) -> set[str]:
     return all_stats
 
 
-# A lsit of informative travel tips to be eco consious while travelling
+# A list of informative travel tips to be eco-conscious while travelling
 TRAVEL_TIPS = [
-    "Select Low-Impact Accommodations: Stay in eco-friendly or certified green hotels that prioritize sustainability"
-    " in their operations.",
-    "Use Public Transport or Bike: Explore destinations by public transit, walking, or biking, rather than renting"
-    " a car or using taxis.",
-    "Eat Local and Seasonal: Support local agriculture and reduce carbon emissions by choosing restaurants that serve"
-    " local, seasonal dishes.",
+    "Select Low-Impact Accommodations: Opt for certified green hotels that focus on sustainable practices.",
+    "Use Public Transport or Bike: Explore by public transit, walking, or biking instead of car rentals or taxis."
+    "Eat Local and Seasonal: Choose places serving local, seasonal dishes to support agriculture and cut emissions.",
     "Carry Reusable Items: Pack a reusable water bottle, shopping bags, and utensils to minimize plastic waste.",
-    "Conserve Resources: Be mindful of your energy and water use in hotels. Turn off lights, reuse towels, and avoid"
-    " long showers.",
-    "Respect Natural Environments: Follow guidelines when visiting natural sites to minimize your impact on wildlife"
-    " and habitats.",
-    "Educate Yourself on Local Cultures: Understand and respect the cultural practices and norms of the places "
-    "you visit to foster positive interactions and reduce cultural impact.",
-    "Choose Sustainable Activities: Opt for eco-tourism experiences that promote conservation and benefit "
-    "local communities.",
-    "Reduce, Reuse, Recycle: Always look for opportunities to reduce waste, reuse resources, and recycle when "
-    "possible during your travels.",
-    "Support Eco-friendly Businesses: From tour operators to souvenir shops, prioritize spending your money with "
-    "businesses that have sustainable practices."]
+    "Conserve Resources: Save energy and water in hotels: turn off lights, reuse towels, and take shorter showers.",
+    "Respect Natural Environments: Follow guidelines when visiting natural sites to minimize your impact on wildlife.",
+    "Understand Local Cultures: Learn and respect local cultures for positive interactions and minimal cultural clash.",
+    "Choose Sustainable Activities: Opt for eco-tourism to support conservation and local communities.",
+    "Reduce, Reuse, Recycle: Reduce waste, reuse, and recycle during travels whenever possible.",
+    "Support Eco-friendly Businesses: Support businesses with sustainable practices, from tours to shops."]
 
 if __name__ == '__main__':
     # import python_ta.contracts
