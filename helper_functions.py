@@ -4,7 +4,7 @@ This Python file contains all the helper functions that we will use in our proje
 import data_classes
 import csv
 import random
-import graph_visualization
+import flight_visualization
 
 
 TRAVEL_TIPS = [
@@ -226,7 +226,7 @@ def run_voyage() -> None:
     # Display the graph from home_airport to all connecting airports.
     graph = create_graph(home_airport=home_airport, airport_coords=airport_coords)
     print("\nHere are all the connecting airports from your home airport.\n")
-    graph_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
+    flight_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
 
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
@@ -246,7 +246,7 @@ def run_voyage() -> None:
     graph = create_graph(home_airport=home_airport, dest_country=dest_country, airport_coords=airport_coords)
     print("\nHere are all the connecting airports in your chosen destination country from "
           "your home airport.\n")
-    graph_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
+    flight_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
 
     dest_airport = input('Which airport would you like to fly to? (Enter airport code) ').strip().upper()
     while dest_airport not in dest_airports:
@@ -259,7 +259,7 @@ def run_voyage() -> None:
     graph = create_graph(home_airport=home_airport, dest_airport=dest_airport, airport_coords=airport_coords)
     print("\nHere are a few flight packages for travelling from your home country to your chosen "
           "destination country.\n")
-    graph_visualization.visualize_new_graph(graph,
+    flight_visualization.visualize_new_graph(graph,
                                  home_airport=home_airport, dest_airport=dest_airport, airport_coords=airport_coords)
 
     print()

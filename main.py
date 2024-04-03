@@ -4,7 +4,7 @@ This Python file contains the code to run our program.
 import csv
 import data_classes
 import helper_functions
-import graph_visualization
+import flight_visualization
 
 
 # Example Code
