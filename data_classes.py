@@ -2,10 +2,8 @@
 
 Module Description
 ==================
-This Python module uses a graph-based representation of the world's airport network with a decision-tree-based
-country matchmaking system. The `Graph` class we implemented models airports as vertices and flights as edges.
-We have made functions to manage airport details, flight connections, and calculate maximum CO2 emissions for flights.
-The `Tree` class constructs a decision tree for the country matchmaker system with user input.
+This Python module contains the Graph and _Vertex class that we will use to store the flight data. This module also
+contains the Tree class and functions used to create a decision tree for the country matchmaking system in our project.
 
 Copyright and Usage Information
 ===============================
@@ -28,14 +26,19 @@ class _Vertex:
     Instance Attributes:
         - airport_code: A code that uniquely identifies this airport.
         - country_name: The country where this airport is located.
-        - neighbours: A mapping of airports that are connected to self by available flights.
-            The flights are stored as a mapping between different flight packages and their
-            ticket price, number of stops, and CO2 emissions.
+        - neighbours: Working outside to in, we choose to represent neighbors as a dictionary because we knew
+            for each neighbor vertex, we would have to access details for flight information, and therefore a
+            mapping between the neighbor and its detail made the most sense. Next, the value of the inner dictionary.
+            The intended purpose of this dictionary is to map different flight packages to the same neighbor.
+            Therefore, in this dictionary, we store the key as the airline that offers the flight package (str),
+            and the sequence of aircraft taken to reach that airport (tuple[str,...]). Once we access the right
+            flight package, we map it to the corresponding list of [price, number of stops, carbon emission_g].
+        - coordinates: The real world (latitude, longitude) coordinates of the airport.
     """
     airport_code: str
     country_name: str
     neighbours: dict[_Vertex, dict[tuple[str, tuple[str, ...]], list[float | int]]]
-    coordinates: tuple[float, float]  # latitude and longitude respectively
+    coordinates: tuple[float, float]            # latitude and longitude respectively
 
     def __init__(self, airport_code: str, country_name: str,
                  neighbours: dict[_Vertex, dict[tuple[str, tuple[str, ...]], list[float | int]]],
@@ -83,7 +86,7 @@ class Graph:
     details such as ticket prices, number of stops, and CO2 emissions.
 
     Private Instance Attributes:
-        - _vertices: A collection of the vertices contained in this graph and maps airport_code to _Vertex object.
+        - _vertices: A collection of the vertices contained in this graph. It maps airport_code to its _Vertex object.
     """
     _vertices: dict[str, _Vertex]
 
