@@ -70,7 +70,7 @@ def run_voyage() -> None:
         print('We are sorry! We do not have enough information on this country. We are constantly trying '
               'to expand our reach. Please try a different country.')
 
-        dest_country = input('Which country would you like to fly to? ').strip()
+        dest_country = input('Which country would you like to fly to? ').strip().lower()
 
     # Display the graph from home_airport to all airports in dest_country.
     print("\nHere are all the connecting airports in your chosen destination country from "
