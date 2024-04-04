@@ -305,14 +305,14 @@ TRAVEL_QUESTIONS = [
 ]
 
 
-def run_country_matchmaker(file: str) -> list[str]:
+def run_country_matchmaker(file: str) -> Optional[list[str]]:
     """Run a country matching program based on the given file.
     """
     decision_tree = build_decision_tree(file)
     char = get_user_input(TRAVEL_QUESTIONS)
     matches = decision_tree.traverse(char)
     if not matches:
-        return []
+        return None
     else:
         return matches
 

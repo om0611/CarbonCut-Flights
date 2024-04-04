@@ -48,21 +48,18 @@ def run_voyage() -> None:
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
     questionare_bool = False
+    matching_countries = None
     while questionare == 'Y':
         questionare_bool = True
         matching_countries = data_classes.run_country_matchmaker('CSV Files/country_traits.csv')
-        if not matching_countries:
+        if matching_countries is None:
             print("There are no countries that match with those specific traits.")
         else:
             print(f"The following countries match your prefereances {matching_countries}")
         questionare = input('Would you like to take the questionare again? (Y/N) ').strip().upper()
     print()
-    if questionare_bool and len(
-            matching_countries) > 1:  # Here we are given an error that says we may be referencing matching_countries
-        # before it is created, but that will never happen as
-        # checked for by our questionaire_bool variable
-        print("\nHere are all the matching countries to your preferences from your home airport. "
-              )
+    if questionare_bool and len(matching_countries) > 1:
+        print("\nHere are all the matching countries to your preferences from your home airport. ")
         graph = create_graph(home_airport=home_airport, dest_countries=matching_countries,
                              airport_coords=airport_coords)
         flight_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
@@ -261,7 +258,6 @@ def optimal_routes(graph: data_classes.Graph, home_airport: str, dest_airport: s
     # Find all the flight packages from home airport to destination airport
     flights = home_vertex.neighbours[destination_vertex]
     flight_scores = calculate_flight_scores(flights, weights)
-    print(flight_scores.items())
 
     # Sort the flights based on the returned score
     sorted_flights = sorted(flight_scores.items(), key=lambda item: item[1])
