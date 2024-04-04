@@ -3,11 +3,9 @@
 # Data Handling and Computation
 csv
 numpy
-random
 
 # Graphics and Data Visualization
 plotly
-networkx
 
 # Code Quality and Testing
 python-ta~=2.7.0

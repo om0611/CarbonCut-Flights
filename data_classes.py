@@ -2,11 +2,10 @@
 
 Module Description
 ==================
-This Python module integrates a graph-based representation of the global airport network with a decision-tree-based
-country matchmaker system. The `Graph` class models airports as vertices and flights as edges, including functionalities
-to manage airport details, flight connections, and calculate maximum CO2 emissions for flights. The `Tree` class
-constructs a decision tree for the country matchmaker system. This system utilizes user responses to travel preference
-questions to recommend countries,
+This Python module uses a graph-based representation of the world's airport network with a decision-tree-based
+country matchmaking system. The `Graph` class we implemented models airports as vertices and flights as edges.
+We have made functions to manage airport details, flight connections, and calculate maximum CO2 emissions for flights.
+The `Tree` class constructs a decision tree for the country matchmaker system with user input.
 
 Copyright and Usage Information
 ===============================
@@ -20,7 +19,6 @@ This file is Copyright (c) 2024 Verde Voyage
 from __future__ import annotations
 from typing import Any, Optional
 import csv
-import networkx as nx
 
 
 class _Vertex:
@@ -80,11 +78,9 @@ class _Vertex:
 
 class Graph:
     """
-    Represents a graph data structure, specifically modeling a network of airports and their connections.
-    Airports are vertices with attributes like code and country, and edges represent flights, including
-    details such as ticket prices, number of stops, and CO2 emissions. Supports operations to add vertices
-    (airports), add edges (flight connections), calculate maximum CO2 emissions between airports, and convert
-    the graph to a NetworkX graph for visualization.
+    Represents a graph, displaying a network of airports and their connections.
+    Airports are vertices with attributes code and country, and edges represent flights which include
+    details such as ticket prices, number of stops, and CO2 emissions.
 
     Private Instance Attributes:
         - _vertices: A collection of the vertices contained in this graph and maps airport_code to _Vertex object.
@@ -132,25 +128,6 @@ class Graph:
         """
         v1 = self._vertices[home_airport_code]
         return v1.max_emissions(dest_airport_code)
-
-    def to_networkx(self, max_vertices: int = 100) -> nx.Graph:
-        """Convert this graph into a networkx Graph.
-
-        max_vertices specifies the maximum number of vertices that can appear in the graph.
-        (This is necessary to limit the visualization output for large graphs.)
-        Note that this method is provided for you, and you shouldn't change it.
-        """
-        graph_nx = nx.Graph()
-        for v in self._vertices.values():
-            graph_nx.add_node(v.airport_code)
-            for u in v.neighbours:
-                if graph_nx.number_of_nodes() < max_vertices:
-                    graph_nx.add_node(u.airport_code)
-                if u.airport_code in graph_nx.nodes:
-                    graph_nx.add_edge(v.airport_code, u.airport_code)
-            if graph_nx.number_of_nodes() >= max_vertices:
-                break
-        return graph_nx
 
     def get_vertex(self, airport: str) -> _Vertex:
         """
