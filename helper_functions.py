@@ -192,7 +192,7 @@ def create_graph(airport_coords: dict[str, tuple[float, float]], home_airport: s
     return graph
 
 
-def calculate_flight_scores(flights: dict[tuple[str, tuple], list[float, int, int]],
+def calculate_flight_scores(flights: dict[tuple[str, tuple[str, ...]], list[float | int]],
                             weights: tuple[float, float, float] = (0.1, 0.1, 0.8)) -> dict[tuple[str, tuple], float]:
     """
     Given a dictionary of flight packages, calculate a score for each flight package in flights
