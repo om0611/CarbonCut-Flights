@@ -57,10 +57,14 @@ def run_voyage() -> None:
             print(f"The following countries match your prefereances {matching_countries}")
         questionare = input('Would you like to take the questionare again? (Y/N) ').strip().upper()
     print()
-    if questionare_bool and len(matching_countries) > 1:
+    if questionare_bool and len(
+            matching_countries) > 1:  # Here we are given an error that says we may be referencing matching_countries
+        # before it is created, but that will never happen as
+        # checked for by our questionaire_bool variable
         print("\nHere are all the matching countries to your preferences from your home airport. "
               )
-        graph = create_graph(home_airport=home_airport, dest_countries=matching_countries, airport_coords=airport_coords)
+        graph = create_graph(home_airport=home_airport, dest_countries=matching_countries,
+                             airport_coords=airport_coords)
         flight_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
 
     print()
