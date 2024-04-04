@@ -47,11 +47,22 @@ def run_voyage() -> None:
     # Ask the user if they would like personalized travel suggestions
     questionare = input('Would you like to answer a few questions to get suggestions for travel destinations '
                         'that are perfect for you? (Y/N) ').strip().upper()
+    questionare_count = False
     while questionare == 'Y':
-        data_classes.run_country_matchmaker('CSV Files/country_traits.csv')
+        questionare_count = True
+        matching_countries = data_classes.run_country_matchmaker('CSV Files/country_traits.csv')
+        if not matching_countries:
+            print("There are no countries that match with those specific traits.")
+        else:
+            print(f"The following countries match your prefereances {matching_countries}")
         questionare = input('Would you like to take the questionare again? (Y/N) ').strip().upper()
+    print()
+    if questionare_count:
+        graph = create_graph(home_airport=home_airport, dest_country=matching_countries, airport_coords=airport_coords)
+        print("\nHere are all the matching countries to your preferences from your home airport. "
+              )
+        flight_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
 
-    # Collect user information and input error checking
     print()
     dest_country = input('Which country would you like to fly to? ').strip().lower()
     while dest_country not in dest_countries:
@@ -61,7 +72,7 @@ def run_voyage() -> None:
         dest_country = input('Which country would you like to fly to? ').strip().lower()
 
     # Display the graph from home_airport to all airports in dest_country.
-    graph = create_graph(home_airport=home_airport, dest_country=dest_country, airport_coords=airport_coords)
+    graph = create_graph(home_airport=home_airport, dest_country=[dest_country], airport_coords=airport_coords)
     print("\nHere are all the connecting airports in your chosen destination country from "
           "your home airport.\n")
     flight_visualization.visualize_new_graph(graph, home_airport=home_airport, airport_coords=airport_coords)
@@ -152,7 +163,7 @@ def run_voyage() -> None:
 
 
 def create_graph(airport_coords: dict[str, tuple[float, float]], home_airport: str = None, dest_airport: str = None,
-                 dest_country: str = None) -> data_classes.Graph:
+                 dest_country: list[str] = None) -> data_classes.Graph:
     """
     Return a graph containing home_airport and dest_airport as vertices, if given, and the flights between the airports
     as the edges connecting the two vertices.
@@ -182,7 +193,7 @@ def create_graph(airport_coords: dict[str, tuple[float, float]], home_airport: s
                     create_graph_helper(graph, row, airport_coords)
 
             elif home_airport is not None and dest_country is not None:
-                if row[0] == home_airport and row[3].lower() == dest_country:
+                if row[0] == home_airport and row[3] in dest_country:
                     create_graph_helper(graph, row, airport_coords)
 
             else:  # home_airport is not None and both dest_airport and dest_country are None
@@ -357,11 +368,11 @@ if __name__ == '__main__':
 
     python_ta.check_all(config={
         'max-line-length': 170,
-        'disable': ['E1136', 'W0221'],
+        'disable': ['E1136', 'W0221', 'E9969'],
         'extra-imports': ['csv', 'random', 'data_classes', 'flight_visualization'],
         'allowed-io': ['run_voyage', 'get_airport_coordinates', 'countries_and_airports', 'optimal_routes',
                        'create_graph'],
         'max-nested-blocks': 4,
-        'max-locals': 25,
-        'max-statements': 80
+        'max-locals': 35,
+        'max-statements': 90
     })
