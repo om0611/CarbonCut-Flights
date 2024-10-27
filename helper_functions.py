@@ -20,6 +20,7 @@ import csv
 import random
 import data_classes
 import flight_visualization
+import zipfile
 
 
 def run_voyage() -> None:
@@ -29,7 +30,14 @@ def run_voyage() -> None:
     """
     # Load in important details from our dataset regarding travel destinations, and airport locations
     print('Welcome to Verde Voyage! This is your ultimate eco-conscious dream vacation planner! \n')
-    home_airports, _, dest_airports, dest_countries = countries_and_airports('CSV Files/flight_data.csv')
+
+    # Extract flight data zip file
+    zip_path = 'CSV Files/flight_data.csv.zip'
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall("CSV Files")         # Extract to current folder
+
+    flight_path_file = "CSV Files/flight_data.csv"
+    home_airports, _, dest_airports, dest_countries = countries_and_airports(flight_path_file)
     airport_coords = get_airport_coordinates()
 
     home_airport = input('What is your home airport? (Enter airport code) ').strip().upper()
